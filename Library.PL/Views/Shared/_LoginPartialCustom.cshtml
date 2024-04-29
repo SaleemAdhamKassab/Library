@@ -1,0 +1,22 @@
+﻿@using Library.PL.Helper
+@using Microsoft.AspNetCore.Identity
+
+<ul class="navbar-nav">
+	@if (Shared.loggedUser.Id != 0)
+	{
+		<li class="nav-item">
+		<li class="nav-item">
+			<a class="nav-link" href="#">Hello @Shared.loggedUser.FirstName</a>
+		</li>
+		<form method="post" class="form-inline" asp-controller="Account" asp-action="logout">
+			<button type="submit" class="btn nav-link">Logout</button>
+		</form>
+		</li>
+	}
+	else
+	{
+		<li class="nav-item">
+			<a class="nav-link" asp-controller="Account" asp-action="login">Login</a>
+		</li>
+	}
+</ul>

@@ -1,0 +1,61 @@
+﻿@using Library.DAL.Models
+@using Library.PL.Helper
+@using static Library.PL.Helper.Shared
+
+@model List<Book>
+
+<h2 class="text-primary text-center pt-2"> Books Home</h2>
+<div class="justify-content-center;">
+	<form method="get" asp-action="Index">
+		<div class="row">
+			<div class="input-group mb-3">
+				<input type="text" name="searchString" class="form-control input-text" placeholder="Search by: Title, Author, or ABSN...">
+				<div class="input-group-append">
+					<button type="submit" class="btn btn-outline-warning"><i class="fa fa-search"></i></button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="row" style="margin-bottom:50px">
+	@foreach (Book book in Model)
+	{
+		<div class="col-md-3 mb-3">
+			<div class="card border-5">
+				<img class="card-img-top" src="~/images/Books/@book.ImagePath" alt="Card image cap" height="200px" width="200px">
+				<div class="card-body text-center">
+					<h5 class="card-title">@book.Title</h5>
+					<span class="card-text">By: @book.Author.FirstName</span>
+					<br />
+					<span class="card-text">ISBN: @book.ISBN</span>
+					<br />
+					@if (book.Status == (int)enBookStatus.Available)
+					{
+						<span class="card-text" style="color:green">Available</span>
+					}
+					else
+					{
+						<span class="card-text" style="color:red">Checked-Out</span>
+					}
+					<br />
+					
+					@if (Shared.loggedUser.Id != 0)
+					{
+						@if (book.Status == (int)enBookStatus.Available)
+						{
+							<form method="post">
+								<input type="submit" value="Borrow" class="btn btn-success btn-sm" asp-action="borrowBook" asp-route-bookId="@book.Id" />
+							</form>
+						}
+						else
+						{
+							<a class="btn btn-success btn-sm disabled">Borrow</a>
+						}
+					}
+
+				</div>
+			</div>
+		</div>
+	}
+</div>

@@ -1,0 +1,45 @@
+﻿@using Library.DAL.Models
+@using Library.PL.Helper
+
+@model List<Book>
+
+@if (Model.Count() == 0)
+{
+	<h1 class="text-danger text-center pt-2"><u>No Borrowed Books Found</u></h1>
+	return;
+}
+
+<h2 class="text-primary text-center pt-2"> @Shared.loggedUser.FirstName Borrowed Books</h2>
+<div class="justify-content-center;">
+	<form method="get" asp-action="Index">
+		<div class="row">
+			<div class="input-group mb-3">
+				<input type="text" name="searchString" class="form-control input-text" placeholder="Search by: Title, Author, or ABSN...">
+				<div class="input-group-append">
+					<button type="submit" class="btn btn-outline-warning"><i class="fa fa-search"></i></button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="row" style="margin-bottom:50px">
+	@foreach (Book book in Model)
+	{
+		<div class="col-md-3 mb-3">
+			<div class="card border-5">
+				<img class="card-img-top" src="~/images/Books/@book.ImagePath" alt="Card image cap" height="200px" width="200px">
+				<div class="card-body text-center">
+					<h5 class="card-title">@book.Title</h5>
+					<span class="card-text">By: @book.Author.FirstName</span>
+					<br />
+					<span class="card-text">ISBN: @book.ISBN</span>
+					<br />
+					<form method="post">
+						<input type="submit" value="Return" class="btn btn-warning btn-sm" asp-action="returnBook" asp-route-bookId="@book.Id" />
+					</form>
+				</div>
+			</div>
+		</div>
+	}
+</div>
